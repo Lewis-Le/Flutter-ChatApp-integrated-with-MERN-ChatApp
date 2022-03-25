@@ -1,6 +1,7 @@
 # flutter_chatapp_nullsafety
 
-A new Flutter project.
+A Flutter project.
+ChatApp Flutter hoạt động cùng chung với server NodeJS phía backend, là app dành cho di động hoạt động chung với WebApp ChatApp ReactJS (Lewis Transpotation).
 
 ## Getting Started
 
