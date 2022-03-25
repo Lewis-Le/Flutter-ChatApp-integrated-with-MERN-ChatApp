@@ -2,11 +2,11 @@
 
 import '../data/chat_data.dart';
 import 'package:flutter/material.dart';
-
+import '../data/server.dart';
 import '../theme/colour.dart';
 
 class ChatCard extends StatelessWidget {
-  const ChatCard({
+  ChatCard({
     Key? key,
     this.chat,
     this.press,
@@ -15,6 +15,7 @@ class ChatCard extends StatelessWidget {
   // final Chat? chat;
   final VoidCallback? press;
   final chat;
+  Server server = Server();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class ChatCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 24,
-                  backgroundImage: AssetImage(chat['room_avatar']),
+                  backgroundImage: NetworkImage(server.address+'/rooms/'+chat['Id']+'/media'+chat['room_avatar']),
                 ),
                 if (true)   //kiểm tra trạng thái user có đang active hay không(do model trong database chưa có trường isActive nên tạm thời cho true)
                   Positioned(

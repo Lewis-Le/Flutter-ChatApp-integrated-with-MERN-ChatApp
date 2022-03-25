@@ -2,22 +2,25 @@
 
 import '../data/message_data.dart';
 import 'package:flutter/material.dart';
-
 import '../theme/colour.dart';
+import '../data/server.dart';
 import 'audio_message.dart';
 import 'text_message.dart';
 import 'video_message.dart';
 
 class Message extends StatelessWidget {
-  const Message({
+  Message({
     Key? key,
     this.message,
+    this.messId,
     this.userId
   }) : super(key: key);
 
   // final ChatMessage? message; //dùng theo class model, message!.content
   final message; //dùng kiểu dynamic không cần class model, message['content]
   final String? userId;
+  final String? messId;
+  Server server = Server();
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +36,15 @@ class Message extends StatelessWidget {
       //     return SizedBox();
       // }
       if (message['content'] == '') {
-        if(message['media'] != []){
-          return VideoMessage();
+        if(message['media'].length > 0){
+          return VideoMessage(media: message['media'], messId: messId);
         }
-        if(message['files'] != []){
-          return SizedBox();
+        if(message['files'].length > 0){
+          return Image(
+            height: 45,
+            width: 45,
+            image: NetworkImage('https://findicons.com/files/icons/2813/flat_jewels/512/file.png'),
+          );;
         }
       }
       return TextMessage(
@@ -55,7 +62,7 @@ class Message extends StatelessWidget {
           if (!(message['send_by'] == userId)) ...[
             CircleAvatar(
               radius: 12,
-              // backgroundImage: AssetImage("assets/images/user_2.png"),
+              // backgroundImage: NetworkImage(server.address+"/"+message['people']['']),
             ),
             SizedBox(width: kDefaultPadding / 2),
           ],

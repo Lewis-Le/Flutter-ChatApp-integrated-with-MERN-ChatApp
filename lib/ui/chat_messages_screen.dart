@@ -3,6 +3,8 @@ import '../data/message_data.dart';
 import '../components/message.dart';
 import '../components/chat_input_field.dart';
 import 'package:flutter/material.dart';
+import '../ui/room_details_screen.dart';
+import '../data/server.dart';
 
 
 class MessagesScreen extends StatefulWidget {
@@ -38,7 +40,7 @@ class MessagesScreenState extends State<StatefulWidget> {
 
   ScrollController _scrollController = new ScrollController();  //scroll controller cho listView các tin nhắn
   List? _newest_message_data; //khởi tạo từ data sẵn trong database là demeChatMessage; đây là list sẽ dc setState mỗi khi có tin nhắn mới pass qua
-
+  Server server = Server();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class MessagesScreenState extends State<StatefulWidget> {
         children: [
           BackButton(),
           CircleAvatar(
-            // backgroundImage: AssetImage("assets/images/user_2.png"),
+            backgroundImage: NetworkImage(server.address+'/rooms/'+mmessages_data['Id']+'/media'+mmessages_data['room_avatar']),
           ),
           SizedBox(width: kDefaultPadding * 0.75),
           Column(
@@ -82,6 +84,15 @@ class MessagesScreenState extends State<StatefulWidget> {
           icon: Icon(Icons.info_outline),
           onPressed: () {
             print('you press info button');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MessagesDetailsScreen(
+                  messages_data: mmessages_data, //truyền data dạng obj của cả group chat này vào screen room details khi nhấn vào button info
+                  userId: uuserId,
+                ),
+              ),
+            );
           },
         ),
         SizedBox(width: kDefaultPadding / 2),
@@ -105,6 +116,7 @@ class MessagesScreenState extends State<StatefulWidget> {
                   Message(
                     message: _newest_message_data![index],
                     userId: uuserId,
+                    messId: mmessages_data['Id'],
                   ),
             ),
           ),
