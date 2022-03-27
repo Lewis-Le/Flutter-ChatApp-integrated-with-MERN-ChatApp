@@ -121,11 +121,13 @@ class MessagesScreenState extends State<StatefulWidget> {
             ),
           ),
         ),
-        ChatInputField(user_id: uuserId, messenger_id: mmessages_data['Id'], callback: (val) => setState(() => {
-          _newest_message_data!.addAll(val),   //mỗi khi có tin nhắn mới thì sẽ set state lại list _newest_message_data từ dữ liệu pass qua từ component ChatInputField sang cho parent là chat_message_screen; cái này là nối 2 list lại với nhau nên dùng addAll()
-          _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeOut),    //auto scroll to bottom khi có tin nhắn mới
-        }
-        )),
+        ChatInputField(user_id: uuserId, messenger_id: mmessages_data['Id'], callback: (val) => {
+          if(mounted) setState(() => {
+            _newest_message_data!.addAll(val),   //mỗi khi có tin nhắn mới thì sẽ set state lại list _newest_message_data từ dữ liệu pass qua từ component ChatInputField sang cho parent là chat_message_screen; cái này là nối 2 list lại với nhau nên dùng addAll()
+            _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeOut),    //auto scroll to bottom khi có tin nhắn mới
+            }
+          )
+        }),
       ],
     );
   }

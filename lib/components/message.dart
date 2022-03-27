@@ -7,6 +7,7 @@ import '../data/server.dart';
 import 'audio_message.dart';
 import 'text_message.dart';
 import 'video_message.dart';
+import '../components/file_message.dart';
 
 class Message extends StatelessWidget {
   Message({
@@ -40,11 +41,10 @@ class Message extends StatelessWidget {
           return VideoMessage(media: message['media'], messId: messId);
         }
         if(message['files'].length > 0){
-          return Image(
-            height: 45,
-            width: 45,
-            image: NetworkImage('https://findicons.com/files/icons/2813/flat_jewels/512/file.png'),
-          );;
+          return FileMessage(
+            message: message,
+            isSender: isSender,
+          );
         }
       }
       return TextMessage(

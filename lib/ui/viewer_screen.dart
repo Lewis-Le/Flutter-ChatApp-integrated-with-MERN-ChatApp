@@ -1,5 +1,6 @@
 import '../theme/colour.dart';
 import 'package:flutter/material.dart';
+import 'package:better_player/better_player.dart';
 import '../data/server.dart';
 
 
@@ -36,6 +37,21 @@ class ViewerScreenState extends State<StatefulWidget> {
   });
 
   Server server = Server();
+  String fileName ='';
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   if(url!.contains('.mp4')) {
+  //     _controller = VideoPlayerController.network(
+  //         server.address + '/rooms/$messId/media$url')
+  //       ..initialize().then((_) {
+  //         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+  //         setState(() {});
+  //       });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +74,7 @@ class ViewerScreenState extends State<StatefulWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'tên file',
+                fileName,
                 style: TextStyle(fontSize: 16),
               ),
               Text(
@@ -82,11 +98,29 @@ class ViewerScreenState extends State<StatefulWidget> {
   }
 
   Widget DataViewer(){
-    if(url!.contains('.jpg')){
+    if(url!.contains('.jpg') || url!.contains('.png') || url!.contains('.jpeg')){
+      setState(() {
+        fileName = 'Trình xem media';
+      });
       return Image(
         image: NetworkImage(server.address+'/rooms/$messId/media$url'),
       );
-    } else {
+    } else if(url!.contains('.mp4')){
+      return  BetterPlayer.network(
+          server.address+'/rooms/$messId/media$url',
+        betterPlayerConfiguration: BetterPlayerConfiguration(
+          aspectRatio: 1,
+          looping: false,
+          autoPlay: true,
+          fit: BoxFit.contain,
+          // startAt: Duration(seconds: 0),
+        ),
+      );
+    }
+    else {
+      setState(() {
+        fileName = url!;
+      });
       return Center(
         child: Text('Không thể xem file này!'),
       );

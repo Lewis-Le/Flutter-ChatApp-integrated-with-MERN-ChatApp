@@ -4,6 +4,7 @@ import '../stream/socket.dart';
 // import 'package:flutter_hooks/flutter_hooks.dart';
 import 'dart:convert';
 import '../theme/colour.dart';
+import '../data/server.dart';
 import '../theme/outline_button.dart';
 import '../components/chat_card.dart';
 import '../data/chat_data.dart';
@@ -52,6 +53,7 @@ class HomeScreenState extends State<StatefulWidget> {
     // )
   ];
   dynamic userData;
+  Server server = Server();
 
   @override
   void initState() {
@@ -118,19 +120,20 @@ class HomeScreenState extends State<StatefulWidget> {
       children: [
         Container(
           padding: EdgeInsets.fromLTRB(
-              kDefaultPadding, 0, kDefaultPadding, kDefaultPadding),
-          color: kPrimaryColor,
-          child: Row(
-            children: [
-              FillOutlineButton(press: () {}, text: "Recent Message"),
-              SizedBox(width: kDefaultPadding),
-              FillOutlineButton(
-                press: () {},
-                text: "Active",
-                isFilled: false,
-              ),
-            ],
+              kDefaultPadding, 0, kDefaultPadding, kDefaultPadding
           ),
+          color: kPrimaryColor,
+          // child: Row(
+          //   children: [
+          //     FillOutlineButton(press: () {}, text: "Recent Message"),
+          //     SizedBox(width: kDefaultPadding),
+          //     FillOutlineButton(
+          //       press: () {},
+          //       text: "Active",
+          //       isFilled: false,
+          //     ),
+          //   ],
+          // ),
         ),
         Expanded(
           // child: FutureBuilder<Chat>(
@@ -195,9 +198,9 @@ class HomeScreenState extends State<StatefulWidget> {
         BottomNavigationBarItem(
           icon: CircleAvatar(
             radius: 14,
-            // backgroundImage: AssetImage("assets/images/user_2.png"),
+            backgroundImage: NetworkImage(server.address+'/'+userData[0]['avatar']),
           ),
-          label: "Profile",
+          label: userData[0]['name'],
         ),
       ],
     );

@@ -1,5 +1,9 @@
+import 'package:flutter_chatapp_nullsafety/components/tab_all_media.dart';
+import '../components/tab_all_file.dart';
 import '../theme/colour.dart';
+import '../data/server.dart';
 import 'package:flutter/material.dart';
+import '../components/people_card.dart';
 
 class MessagesDetailsScreen extends StatefulWidget {
   static const route = '/chat_message_details_screen';
@@ -26,6 +30,7 @@ class MessagesDetailsScreenState extends State<StatefulWidget> {
 
   final dynamic mmessages_data;
   final String? uuserId;
+  Server server = Server();
 
   MessagesDetailsScreenState({
     this.mmessages_data,
@@ -38,7 +43,15 @@ class MessagesDetailsScreenState extends State<StatefulWidget> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(mmessages_data['room_name']),
+            title: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(server.address+'/rooms/'+mmessages_data['Id']+'/media'+mmessages_data['room_avatar']),
+                ),
+                SizedBox(width: kDefaultPadding * 0.75),
+                Text(mmessages_data['room_name']),
+              ],
+            ),
             centerTitle: true,
             bottom: TabBar(
               tabs: [
@@ -50,12 +63,42 @@ class MessagesDetailsScreenState extends State<StatefulWidget> {
           ),
           body: TabBarView(
             children: [
-              Center(child: Text('Danh sách các thành viên trong group chat này')),
-              Center(child: Text('Danh sách tất cả media trong group chat này')),
-              Center(child: Text('Danh sách tất cả file trong group chat này')),
+              TabPeople(),
+              TabMedia(),
+              TabFile(),
             ],
           ),
         ),
+    );
+  }
+
+  Widget TabPeople(){
+    return ListView.builder(
+      itemCount: mmessages_data!['people'].length,
+      itemBuilder: (context, index) => PeopleCard(
+        people_data: mmessages_data!['people'][index],
+        // press: () => Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => MessagesScreen(
+        //       messages_data: chatData![index],
+        //       userId: '6124d969ec6a70a004662dc1',
+        //     ),
+        //   ),
+        // ),
+      ),
+    );
+  }
+
+  Widget TabMedia(){
+    return GridAllMedia(
+      messenger_data: mmessages_data,
+    );
+  }
+
+  Widget TabFile(){
+    return GridAllFile(
+      messenger_data: mmessages_data,
     );
   }
 
