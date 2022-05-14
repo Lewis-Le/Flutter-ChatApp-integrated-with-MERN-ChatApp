@@ -82,7 +82,7 @@ class ChatInputField extends HookWidget {
           ),
         ],
       ),
-      child: SafeArea(
+      child: Container(
         child: Row(
           children: [
             // Icon(Icons.mic, color: kPrimaryColor),

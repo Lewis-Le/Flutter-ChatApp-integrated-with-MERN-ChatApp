@@ -60,15 +60,17 @@ class ChatCard extends StatelessWidget {
                     Text(
                       chat['room_name'],
                       style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
                     ),
                     SizedBox(height: 8),
                     Opacity(
-                      opacity: 0.64,
+                      opacity: 0.44,
                       child: Text(
-                        chat['create_by'],   //last message trong group
+                        chat['message'][chat['message'].length-1]['content']=='' ? 'File or Media' : chat['message'][chat['message'].length-1]['content'],   //last message trong group
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        style:
+                        TextStyle(color: Colors.white),
                       ),
                     ),
                   ],

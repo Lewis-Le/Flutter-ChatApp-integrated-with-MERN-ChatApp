@@ -28,14 +28,19 @@ class TextMessage extends StatelessWidget {   //message truyền vào là dạng
         color: kPrimaryColor.withOpacity(isSender! ? 1 : 0.1),
         borderRadius: BorderRadius.circular(30),
       ),
-      child: Text(
-        message['content']==null ? '--' : message['content'],
-        style: TextStyle(
-          color: isSender!
-              ? Colors.white
-              : Theme.of(context).textTheme.bodyText1!.color,
-        ),
-      ),
+      child: Wrap(
+        children: [
+          Text(
+            message['content']==null ? '--' : message['content'],
+            style: TextStyle(
+              color: isSender!
+                  ? Colors.white
+                  : Theme.of(context).textTheme.bodyText1!.color,
+            ),
+          ),
+        ],
+      )
     );
   }
 }
+

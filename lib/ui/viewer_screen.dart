@@ -102,8 +102,10 @@ class ViewerScreenState extends State<StatefulWidget> {
       setState(() {
         fileName = 'Trình xem media';
       });
-      return Image(
-        image: NetworkImage(server.address+'/rooms/$messId/media$url'),
+      return InteractiveViewer(
+          child: Image(
+            image: NetworkImage(server.address+'/rooms/$messId/media$url'),
+          ),
       );
     } else if(url!.contains('.mp4')){
       return  BetterPlayer.network(
@@ -122,7 +124,15 @@ class ViewerScreenState extends State<StatefulWidget> {
         fileName = url!;
       });
       return Center(
-        child: Text('Không thể xem file này!'),
+        child: IconButton(
+          icon: Icon(Icons.download),
+          iconSize: 50,
+          color: Colors.brown,
+          tooltip: 'Download file này về',
+          onPressed: () {
+            print('Downloading...');
+          },
+        ),
       );
     }
   }

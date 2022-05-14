@@ -45,6 +45,7 @@ class MessagesScreenState extends State<StatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: buildAppBar(),
       body: Body(),
     );
@@ -53,6 +54,7 @@ class MessagesScreenState extends State<StatefulWidget> {
   AppBar buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
+      backgroundColor: Colors.white.withOpacity(0.4),
       title: Row(
         children: [
           BackButton(),
@@ -107,17 +109,26 @@ class MessagesScreenState extends State<StatefulWidget> {
     return Column(
       children: [
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            child: ListView.builder(
-              controller: _scrollController,  //để scroll to bottom
-              itemCount: _newest_message_data!.length,
-              itemBuilder: (context, index) =>
-                  Message(
-                    message: _newest_message_data![index],
-                    userId: uuserId,
-                    messId: mmessages_data['Id'],
-                  ),
+          child: Container(
+            // decoration: BoxDecoration(
+            //   image: DecorationImage(
+            //     image: NetworkImage('https://www.teahub.io/photos/full/301-3012547_ios-blur-background-dark.jpg'),
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
+            height: MediaQuery.of(context).size.height,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              child: ListView.builder(
+                controller: _scrollController,  //để scroll to bottom
+                itemCount: _newest_message_data!.length,
+                itemBuilder: (context, index) =>
+                    Message(
+                      message: _newest_message_data![index],
+                      userId: uuserId,
+                      messId: mmessages_data['Id'],
+                    ),
+              ),
             ),
           ),
         ),
