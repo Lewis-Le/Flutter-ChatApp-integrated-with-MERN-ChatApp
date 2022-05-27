@@ -61,6 +61,7 @@ class HomeScreenState extends State<StatefulWidget> {
     //   time: '5m ago',
     // )
   ];
+  List? newsfeedData = [];
   dynamic userData;
   Server server = Server();
 
@@ -103,6 +104,21 @@ class HomeScreenState extends State<StatefulWidget> {
       print(error);
     });
 
+    //Get data newsfeed từ server
+    http.get(Uri.http('10.0.2.2:8001', '/process/news/all')).then(
+            (result3) {
+          // print(result.body);
+          var jsonData3 = result3.body;
+          var jsonObj3 = json.decode(jsonData3);  //chuyển từ json raw string sang json obj dể dùng (tương tự body parser)
+          setState(() {
+            newsfeedData!.addAll(jsonObj3);   //nối 2 list dùng addAll
+          });
+          // return jsonData;
+        }
+    ).catchError((Object error) {
+      print(error);
+    });
+
   }
 
 
@@ -117,7 +133,7 @@ class HomeScreenState extends State<StatefulWidget> {
         index: currentIndex,
         children: [
           CourseScreen(),
-          NewsFeedScreen(),
+          NewsFeedScreen(newsfeedData: newsfeedData),
           _Home_screen(width, heigth),
           // ProfileScreen(userData: userData[0]),
         ],
@@ -196,7 +212,7 @@ class HomeScreenState extends State<StatefulWidget> {
           ),
           SizedBox(width: 12,),
           Text(
-            'Hữu Phúc',
+            'Phúc',
             style: TextStyle(
               fontSize: 18,
               color: kTextColor,

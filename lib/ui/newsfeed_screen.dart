@@ -1,21 +1,35 @@
-// import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chatapp_nullsafety/components/chat_input_field.dart';
-import 'dart:async';
-// import 'package:http/http.dart' as http;
-import './login_screen.dart';
+import '../data/server.dart';
 
 class NewsFeedScreen extends StatefulWidget {
   static const route= '/newsfeed';
+
+  const NewsFeedScreen({
+    Key? key,
+    this.newsfeedData,
+    this.userId,
+  }) : super(key: key);
+
+  final dynamic newsfeedData; //data dạng obj của các bài viết
+  final String? userId;
+
   @override
   State<StatefulWidget> createState() {
-    return NewsFeedScreenState();
+    return NewsFeedScreenState(newsfeedData: newsfeedData, userId: userId);
   }
-
 }
 
-class NewsFeedScreenState extends State<StatefulWidget> {
 
+class NewsFeedScreenState extends State<StatefulWidget> {
+  final dynamic newsfeedData;
+  final String? userId;
+
+  NewsFeedScreenState({
+    this.newsfeedData,
+    this.userId,
+  });
+
+  Server server = Server();
   final scrollController = ScrollController();
 
   @override
@@ -32,7 +46,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
           Container(
             width: width,
             height: heigth*0.80,
-            child: _contentArti(),
+            child: _contentArti(),  //listview các bài viết
           ),
         ],
       ),
@@ -131,7 +145,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
     );
   }
 
-  Widget _cardArti(){
+  Widget _cardArti(data){
     return GestureDetector(
       // onTap: (){
       //   Navigator.of(context).pushReplacementNamed('/details');
@@ -142,7 +156,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
       //   //   ));
       // },
       child: Container(
-          margin: EdgeInsets.only(bottom: 10),
+          margin: EdgeInsets.only(bottom: 10, left: 5, right: 5),
           width: MediaQuery.of(context).size.width,
           child: Container(
             child: Container(
@@ -150,7 +164,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
               alignment: Alignment.bottomCenter,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(bottomRight: Radius.circular(6), bottomLeft: Radius.circular(6)),
-                color: Colors.white38,
+                color: Colors.black12,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +177,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
                           children: [
                             CircleAvatar(
                               radius: 18,
-                              backgroundImage: NetworkImage('https://cdn.dribbble.com/users/3734064/screenshots/14413405/media/6744f33319119e4db7637ba5b49e5d78.png?compress=1&resize=400x300&vertical=top'),
+                              backgroundImage: NetworkImage(server.address_feed+'/'+data['user_avatar']),
                             ),
                             if (true)   //kiểm tra trạng thái user có đang active hay không(do model trong database chưa có trường isActive nên tạm thời cho true)
                               Positioned(
@@ -190,7 +204,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Lewis Lê',
+                                  data['user_name'],
                                   style:
                                   TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: Colors.black),
                                 ),
@@ -198,7 +212,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
                                 Opacity(
                                   opacity: 0.44,
                                   child: Text(
-                                    'Hôm qua lúc 12h45',   //time create
+                                    data['created'],   //time create
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style:
@@ -217,10 +231,10 @@ class NewsFeedScreenState extends State<StatefulWidget> {
                     ),
                   ),
                   SizedBox(height: 6),
-                  ClipRRect(
+                  data['news_type']['image'].length==0 ? SizedBox(height: 1) : ClipRRect(   //nếu bài viết có hình ảnh thì hiển thị hình ảnh, ngược lại thì ko hiện
                       borderRadius: BorderRadius.circular(6),
                       child: Image.network(
-                        'https://images.unsplash.com/photo-1554475901-4538ddfbccc2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1504&q=80',
+                        server.address_feed+'/'+data['news_type']['image'][0],
                         height: 200,
                         width: MediaQuery.of(context).size.width,
                         fit: BoxFit.cover,
@@ -230,21 +244,21 @@ class NewsFeedScreenState extends State<StatefulWidget> {
                     height: 12,
                   ),
                   Text(
-                    'Viết chương trình gồm ít nhất một luồng các màn hình để trình bày layout các loại màn hình khác nhau của một ứng dụng. Ví dụ làm theo các layout trong tài liệu sau:',
+                    data['news_type']['status'],
                     maxLines: 2,
-                    style: TextStyle(color: Colors.black54, fontSize: 12),
+                    style: TextStyle(color: Colors.black54, fontSize: 16),
                   ),
-                  Container(
-                    child: Row(
-                      children: [
-                        ElevatedButton(onPressed: () => {}, child: Row( children: [ Icon(Icons.monitor_heart), SizedBox(width: 5), Text('120')]) ),
-                        SizedBox(width: 12),
-                        ElevatedButton(onPressed: () => {}, child: Row( children: [ Icon(Icons.comment), SizedBox(width: 5), Text('12')]) ),
-                        SizedBox(width: 12),
-                        ElevatedButton(onPressed: () => {}, child: Row( children: [ Icon(Icons.save) ]) ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   child: Row(
+                  //     children: [
+                  //       ElevatedButton(onPressed: () => {}, child: Row( children: [ Icon(Icons.monitor_heart), SizedBox(width: 5), Text('120')]) ),
+                  //       SizedBox(width: 12),
+                  //       ElevatedButton(onPressed: () => {}, child: Row( children: [ Icon(Icons.comment), SizedBox(width: 5), Text('12')]) ),
+                  //       SizedBox(width: 12),
+                  //       ElevatedButton(onPressed: () => {}, child: Row( children: [ Icon(Icons.save) ]) ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -270,11 +284,11 @@ class NewsFeedScreenState extends State<StatefulWidget> {
     return Container(
       margin: EdgeInsets.only(top: 2),
       child: ListView.builder(
-          itemCount: 12,
+          itemCount: newsfeedData.length,
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
           itemBuilder: (context, index) {
-            return _cardArti();
+            return _cardArti(newsfeedData[index]);
           }),
     );
   }
