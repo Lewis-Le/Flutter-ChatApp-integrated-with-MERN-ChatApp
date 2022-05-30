@@ -40,6 +40,7 @@ dependencies:
   better_player: ^0.0.81
   audioplayers: ^0.20.1
   flutter_snake_navigationbar: ^0.6.1
+  image_picker: ^0.8.2
 
 dev_dependencies:
   flutter_test:

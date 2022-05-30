@@ -15,6 +15,7 @@ import '../data/chat_data.dart';
 import '../ui/course_screen.dart';
 import '../ui/chat_messages_screen.dart';
 import '../ui/newsfeed_screen.dart';
+import '../ui/create_new_post_screen.dart';
 import '../ui/profile_screen.dart';
 
 
@@ -118,7 +119,6 @@ class HomeScreenState extends State<StatefulWidget> {
     ).catchError((Object error) {
       print(error);
     });
-
   }
 
 
@@ -134,7 +134,7 @@ class HomeScreenState extends State<StatefulWidget> {
         children: [
           CourseScreen(),
           NewsFeedScreen(newsfeedData: newsfeedData),
-          _Home_screen(width, heigth),
+          ChatScreen(width, heigth),
           // ProfileScreen(userData: userData[0]),
         ],
       ),
@@ -142,8 +142,11 @@ class HomeScreenState extends State<StatefulWidget> {
         backgroundColor: Colors.white.withOpacity(0.4),
         child: Icon(Icons.add),
         onPressed: () {
-          // Navigator.of(context).pushReplacementNamed('/stopwatch');
-          print('you press create new message!');
+          // Navigator.of(context).pushReplacementNamed('/createpost');
+          if(currentIndex == 1) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreatePostScreen()));
+          }
+          print('you press floating action button');
         },
       ),
       bottomNavigationBar: BottomNav(),
@@ -151,7 +154,8 @@ class HomeScreenState extends State<StatefulWidget> {
   }
 
 
-  Widget _Home_screen(width, height) {
+
+  Widget ChatScreen(width, height) {
     return Column(
       children: [
         Container(
@@ -194,6 +198,8 @@ class HomeScreenState extends State<StatefulWidget> {
       ],
     );
   }
+
+
 
   AppBar buildAppBar() {
     return AppBar(

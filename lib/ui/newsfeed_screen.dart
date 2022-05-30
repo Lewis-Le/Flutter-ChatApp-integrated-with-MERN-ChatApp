@@ -40,12 +40,16 @@ class NewsFeedScreenState extends State<StatefulWidget> {
       // appBar: _appbar(),
       body: Column(
         children: [
-          SizedBox(height: 60),
-          // Expanded(child: _content()),
-          SizedBox(height: 10),
+          SizedBox(height: 75),
           Container(
             width: width,
-            height: heigth*0.80,
+            height: 50,
+            child: _content(),
+          ),
+          SizedBox(height: 5),
+          Container(
+            width: width,
+            height: heigth*0.71,
             child: _contentArti(),  //listview các bài viết
           ),
         ],
@@ -131,7 +135,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
                   color: Colors.black26
               ),
               child: Text(
-                'Tin tức mới',
+                'Nhóm Flutter',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
@@ -156,7 +160,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
       //   //   ));
       // },
       child: Container(
-          margin: EdgeInsets.only(bottom: 10, left: 5, right: 5),
+          margin: EdgeInsets.only(bottom: 7, left: 5, right: 5),
           width: MediaQuery.of(context).size.width,
           child: Container(
             child: Container(
@@ -267,7 +271,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
     );
   }
 
-  Widget _content(){  //listview của card phân loại nhỏ trên cùng
+  Widget _content(){  //listview của các group nhóm dang tham gia
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       height: 21,
