@@ -8,14 +8,18 @@ class NewsFeedScreen extends StatefulWidget {
     Key? key,
     this.newsfeedData,
     this.userId,
+    this.userName,
+    this.userAvatar,
   }) : super(key: key);
 
   final dynamic newsfeedData; //data dạng obj của các bài viết
   final String? userId;
+  final userName;
+  final userAvatar;
 
   @override
   State<StatefulWidget> createState() {
-    return NewsFeedScreenState(newsfeedData: newsfeedData, userId: userId);
+    return NewsFeedScreenState(newsfeedData: newsfeedData, userId: userId, userName: userName, userAvatar: userAvatar);
   }
 }
 
@@ -23,10 +27,14 @@ class NewsFeedScreen extends StatefulWidget {
 class NewsFeedScreenState extends State<StatefulWidget> {
   final dynamic newsfeedData;
   final String? userId;
+  final userName;
+  final userAvatar;
 
   NewsFeedScreenState({
     this.newsfeedData,
     this.userId,
+    this.userName,
+    this.userAvatar,
   });
 
   Server server = Server();
@@ -62,7 +70,6 @@ class NewsFeedScreenState extends State<StatefulWidget> {
       // ),
     );
   }
-
 
 
   AppBar _appbar(){

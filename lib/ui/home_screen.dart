@@ -133,9 +133,9 @@ class HomeScreenState extends State<StatefulWidget> {
         index: currentIndex,
         children: [
           CourseScreen(),
-          NewsFeedScreen(newsfeedData: newsfeedData),
+          NewsFeedScreen(newsfeedData: newsfeedData, userId: userData==null ? '' : userData[0]['Id'], userAvatar: userData==null ? '' : server.address+'/'+userData[0]['avatar'], userName: userData==null ? '' : userData[0]['name']),
           ChatScreen(width, heigth),
-          // ProfileScreen(userData: userData[0]),
+          ProfileScreen(userData: userData),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -144,7 +144,7 @@ class HomeScreenState extends State<StatefulWidget> {
         onPressed: () {
           // Navigator.of(context).pushReplacementNamed('/createpost');
           if(currentIndex == 1) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreatePostScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreatePostScreen(userId: userData==null ? '' : userData[0]['Id'], userAvatar: userData==null ? '' : server.address+'/'+userData[0]['avatar'], userName: userData==null ? '' : userData[0]['name'])));
           }
           print('you press floating action button');
         },
@@ -154,13 +154,12 @@ class HomeScreenState extends State<StatefulWidget> {
   }
 
 
-
   Widget ChatScreen(width, height) {
     return Column(
       children: [
         Container(
           width: width,
-          height: height,
+          height: height*0.9,
           // child: FutureBuilder<Chat>(
           //   future: futureChat,
           //   builder: (context, snapshot) {
@@ -200,7 +199,6 @@ class HomeScreenState extends State<StatefulWidget> {
   }
 
 
-
   AppBar buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -237,7 +235,7 @@ class HomeScreenState extends State<StatefulWidget> {
   }
 
 
-  Widget buildBottomNavigationBar(){  //old
+  Widget buildBottomNavigationBar() {  //old
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: _selectedIndex,
@@ -260,6 +258,7 @@ class HomeScreenState extends State<StatefulWidget> {
       ],
     );
   }
+
 
   Widget BottomNav(){
     double displayWidth = MediaQuery.of(context).size.width;
