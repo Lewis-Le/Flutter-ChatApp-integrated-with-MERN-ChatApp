@@ -7,31 +7,35 @@ class NewsFeedScreen extends StatefulWidget {
   const NewsFeedScreen({
     Key? key,
     this.newsfeedData,
+    this.chatData,
     this.userId,
     this.userName,
     this.userAvatar,
   }) : super(key: key);
 
   final dynamic newsfeedData; //data dạng obj của các bài viết
+  final dynamic chatData; //data dạng obj của các group chat
   final String? userId;
   final userName;
   final userAvatar;
 
   @override
   State<StatefulWidget> createState() {
-    return NewsFeedScreenState(newsfeedData: newsfeedData, userId: userId, userName: userName, userAvatar: userAvatar);
+    return NewsFeedScreenState(newsfeedData: newsfeedData, chatData: chatData, userId: userId, userName: userName, userAvatar: userAvatar);
   }
 }
 
 
 class NewsFeedScreenState extends State<StatefulWidget> {
   final dynamic newsfeedData;
+  final dynamic chatData;
   final String? userId;
   final userName;
   final userAvatar;
 
   NewsFeedScreenState({
     this.newsfeedData,
+    this.chatData,
     this.userId,
     this.userName,
     this.userAvatar,
@@ -111,7 +115,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
 
 
 
-  Widget _card(){
+  Widget _card(data){
     return GestureDetector(
       // onTap: (){
       //   Navigator.push(context, MaterialPageRoute(
@@ -126,8 +130,13 @@ class NewsFeedScreenState extends State<StatefulWidget> {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(5),
-              child: Image.network(
+              child: data['room_avatar']=='' ? Image.network(
                 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1502&q=80',
+                height: 60,
+                width: 120,
+                fit: BoxFit.cover,
+              ) : Image.network(
+                server.address_feed+'/rooms/'+data['Id']+'/media'+data['room_avatar'],
                 height: 60,
                 width: 120,
                 fit: BoxFit.cover,
@@ -142,7 +151,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
                   color: Colors.black26
               ),
               child: Text(
-                'Nhóm Flutter',
+                data['room_name'],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
@@ -286,7 +295,7 @@ class NewsFeedScreenState extends State<StatefulWidget> {
           scrollDirection: Axis.horizontal,
           itemCount: 12,
           itemBuilder: (context, index) {
-            return _card();
+            return _card(chatData[index]);
           }),
     );
   }

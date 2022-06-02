@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../stream/bloc_stream.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../data/server.dart';
 
 enum ImageSourceType { gallery, camera }
 
@@ -20,7 +23,7 @@ class CreatePostScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return CreatePostScreenState(userId: userId, userName: userName, userAvatar: userAvatar);   //tham số userAvatar là full đường link url hình avatar của user
+    return CreatePostScreenState(userId: userId, userName: userName, userAvatar: userAvatar);   //tham số userAvatar là users/...
   }
 }
 
@@ -43,6 +46,7 @@ class CreatePostScreenState extends State<StatefulWidget> {
   String? errorMessagePass = '';
 
   final imagePicker = new ImagePicker();
+  final server = Server();
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +75,7 @@ class CreatePostScreenState extends State<StatefulWidget> {
                       ),
                     ],
                   ),
-                  visible: status!='',
+                  visible: status!='' && status!=null,
                 ),
                 // SizedBox(height: 12),
                 // PostButton(),
@@ -170,7 +174,7 @@ class CreatePostScreenState extends State<StatefulWidget> {
         children: [
           BackButton(),
           CircleAvatar(
-            backgroundImage: NetworkImage(userAvatar),
+            backgroundImage: NetworkImage(server.address_feed+'/'+userAvatar),
           ),
           SizedBox(width: 12),
           Text(userName),
@@ -180,18 +184,34 @@ class CreatePostScreenState extends State<StatefulWidget> {
   }
 
 
-  _handle_post() {
+  _handle_post() async {
     var post_data = {
       'user_id': userId,
       'user_name': userName,
-      'user_avatar': '',
+      'user_avatar': userAvatar,
       'type': 'news',
       'status': status,
       'image': [],
       'video': [],
-      'format_font': {},
+      'group': [],
       'is_blocked': [],
     };
+    final response = await http.post(
+      Uri.parse(server.address_feed+'/process/add_news'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(post_data)
+    );
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Đăng bài thành công"),
+      ));
+      Navigator.pop(context);
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to create post.');
+    }
     // List<dynamic> ed = ['send-new-post', post_data];
     // socket!.addSink(ed);
   }
